@@ -49,6 +49,7 @@ export const isVisible = (item, snapshot) =>
  * @property {Map<string,ColorDef>} [YSyncOpts.colorMapping]
  * @property {Y.PermanentUserData|null} [YSyncOpts.permanentUserData]
  * @property {function} [YSyncOpts.onFirstRender] Fired when the content from Yjs is initially rendered to ProseMirror
+ * @property {Y.Doc} [YSyncOpts.yDoc]
  */
 
 /**
@@ -87,7 +88,8 @@ export const ySyncPlugin = (yXmlFragment, {
   colors = defaultColors,
   colorMapping = new Map(),
   permanentUserData = null,
-  onFirstRender = () => {}
+  onFirstRender = () => {},
+  yDoc = null
 } = {}) => {
   let changedInitialContent = false
   let rerenderTimeout
@@ -106,7 +108,7 @@ export const ySyncPlugin = (yXmlFragment, {
       init: (_initargs, _state) => {
         return {
           type: yXmlFragment,
-          doc: yXmlFragment.doc,
+          doc: yDoc || yXmlFragment.doc,
           binding: null,
           snapshot: null,
           prevSnapshot: null,
@@ -172,7 +174,7 @@ export const ySyncPlugin = (yXmlFragment, {
       }
     },
     view: (view) => {
-      const binding = new ProsemirrorBinding(yXmlFragment, view)
+      const binding = new ProsemirrorBinding(yXmlFragment, view, yDoc)
       if (rerenderTimeout != null) {
         rerenderTimeout.destroy()
       }
@@ -274,8 +276,9 @@ export class ProsemirrorBinding {
   /**
    * @param {Y.XmlFragment} yXmlFragment The bind source
    * @param {any} prosemirrorView The target binding
+   * @param {Y.Doc} yDoc The YDoc contains the bind source
    */
-  constructor (yXmlFragment, prosemirrorView) {
+  constructor (yXmlFragment, prosemirrorView, yDoc) {
     this.type = yXmlFragment
     this.prosemirrorView = prosemirrorView
     this.mux = createMutex()
@@ -289,7 +292,7 @@ export class ProsemirrorBinding {
      * @type {Y.Doc}
      */
     // @ts-ignore
-    this.doc = yXmlFragment.doc
+    this.doc = yDoc || yXmlFragment.doc
     /**
      * current selection as relative positions in the Yjs model
      */
@@ -659,7 +662,7 @@ const createNodeFromYElement = (
       .forEach(createChildren)
   }
   try {
-    const attrs = el.getAttributes(snapshot)
+    const attrs = el.getAttributes()
     if (snapshot !== undefined) {
       if (!isVisible(/** @type {Y.Item} */ (el._item), snapshot)) {
         attrs.ychange = computeYChange
