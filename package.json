@@ -1,16 +1,12 @@
 {
-  "name": "y-prosemirror",
-  "version": "1.2.1",
+  "name": "@kevindenight/y-prosemirror",
+  "version": "1.2.2",
   "description": "Prosemirror bindings for Yjs",
   "main": "./dist/y-prosemirror.cjs",
   "module": "./src/y-prosemirror.js",
   "type": "module",
   "types": "./dist/src/y-prosemirror.d.ts",
   "sideEffects": false,
-  "funding": {
-    "type": "GitHub Sponsors ❤",
-    "url": "https://github.com/sponsors/dmonad"
-  },
   "scripts": {
     "dist": "rm -rf dist && rollup -c && tsc",
     "test": "npm run lint && rollup -c && node dist/test.cjs",
@@ -33,12 +29,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yjs/y-prosemirror.git"
+    "url": "git+https://github.com/kevindenight/y-prosemirror.git"
   },
   "keywords": [
     "Yjs"
   ],
-  "author": "Kevin Jahns <kevin.jahns@protonmail.com>",
+  "author": "Kevin Denight <kevindenight@gmail.com>",
   "license": "MIT",
   "standard": {
     "ignore": [
@@ -48,9 +44,9 @@
     ]
   },
   "bugs": {
-    "url": "https://github.com/yjs/y-prosemirror/issues"
+    "url": "https://github.com/kevindenight/y-prosemirror/issues"
   },
-  "homepage": "https://github.com/yjs/y-prosemirror#readme",
+  "homepage": "https://github.com/kevindenight/y-prosemirror#readme",
   "dependencies": {
     "lib0": "^0.2.42"
   },
